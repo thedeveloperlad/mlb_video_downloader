@@ -9,7 +9,7 @@ function App()
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Homepage />} />
-        <Route path="/download" element={<DownloadPage />} />
+        <Route path="/downloadpage" element={<DownloadPage />} />
       </Routes>
     </BrowserRouter>
   );

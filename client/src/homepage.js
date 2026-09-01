@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Stack from 'react-bootstrap/Stack';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
@@ -27,6 +28,8 @@ function App()
   const [jsonRes, setJsonRes] = useState('');
   const [dataName, setDataName] = useState('');
   const [dataSource, setDataSource] = useState('');
+  const navigate = useNavigate();
+
   const handleChange = (event) => {
         setInputValue(event.target.value); // Update state on every input change
   };
@@ -78,6 +81,8 @@ function App()
       console.log('source', data.source )
       setDataName(data.name);
       setDataSource(data.source);
+
+      navigate('/downloadpage', { state: data }); //Send web data to downloadpage
 
     } catch (error)
     {
