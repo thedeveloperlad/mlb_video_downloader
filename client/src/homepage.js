@@ -147,24 +147,6 @@ function App()
       </div>*/}
       </Row>
       </div>
-    <h2>Flex Grow Relative Example</h2>
-    <div class="container">
-        {/*<div>NAME: {dataName}</div>*/}
-        {/*<div>Source: {dataSource}</div>*/}
-        <div class="item item-grow-1">Name: {dataName}</div>
-        <div class="item item-grow-1">Source: {dataSource}</div>
-        <div class="item item-grow-1">
-          <a href={dataSource} download={dataName+".mp4"}>
-            <button> Download Video File </button>
-          </a>
-        </div>
-        <video src={dataSource} width="800" height="400" controls />
-        {/*<div>Source: {jsonRes.data.originalData.source}</div>*/}
-        {/*<div class="item item-grow-1">Item 1 (grow: 1)</div>
-        <div class="item item-grow-2">Item 2 (grow: 2)</div>
-        <div class="item item-grow-3">Item 3 (grow: 3)</div>
-        <div class="item item-grow-3"><p>Message from server: {message}</p></div>*/}
-    </div>
   </div>
 
     </> 
