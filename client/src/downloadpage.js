@@ -46,24 +46,28 @@ function DownloadPage() {
   };
 
   return (
-    <div class="container">
-        {/*<div>NAME: {dataName}</div>*/}
-        {/*<div>Source: {dataSource}</div>*/}
-        <video src={dataRecieve.source} width="800" height="400" controls />
-        <div class="item item-grow-1">Name: {dataRecieve.name}</div>
-        {/* <div class="item item-grow-1">Source: {dataRecieve.source}</div> */}
-        <div class="item item-grow-1">
-            <button class="btn btn-lg btn-primary" onClick={() => handleDownload(dataRecieve.source, dataRecieve.name)}  disabled={isDownloading}>
+
+    
+    <div style={{ maxWidth: '1000px', margin: '0 auto', background: 'cornflowerblue' }}>
+
+      {/* --- COLUMN LAYOUT --- */}
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        gap: '5px' 
+      }}>
+        <div style={{ padding: '15px', background: '#020c24' }}><video src={dataRecieve.source} width="800" height="400" controls /></div>
+        <div style={{ padding: '15px', background: '#f6f6f9' }}>{dataRecieve.mlbJsonRaw.name}</div>
+        <div style={{ padding: '15px', background: '#f6f6f9' }}>{dataRecieve.mlbJsonRaw.description}</div>
+        <div style={{ padding: '15px', background: '#f6f6f9' }}>
+          <button class="btn btn-lg btn-primary" onClick={() => handleDownload(dataRecieve.source, dataRecieve.name)}  disabled={isDownloading}>
                {isDownloading ? 'Downloading video...' : 'Download MP4 Video File'}
                </button>
-        </div>
-
-        {/*<div>Source: {jsonRes.data.originalData.source}</div>*/}
-        {/*<div class="item item-grow-1">Item 1 (grow: 1)</div>
-        <div class="item item-grow-2">Item 2 (grow: 2)</div>
-        <div class="item item-grow-3">Item 3 (grow: 3)</div>
-        <div class="item item-grow-3"><p>Message from server: {message}</p></div>*/}
+              </div>
+      </div>
     </div>
+
+    
   );
 }
 

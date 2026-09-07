@@ -89,9 +89,16 @@ async function getMetadataParameters(url)
         const ogvideoMp4Source = $('meta[property="og:video"]').attr('content');
         console.log('OG video source:', ogvideoMp4Source);
 
+        const jsonRawText = $('script[type="application/ld+json"]').html();
+        
+        if (jsonRawText) {
+            const parsedData = JSON.parse(jsonRawText.trim());
+            // setJsonData(parsedData);
+            videoInformation.mlbJsonRaw = parsedData;
+        }
+
         videoInformation.name = ogvideoTitle;
         videoInformation.source  = ogvideoMp4Source;
-
         // videoInformation = [{name: ogvideoTitle, source: ogvideoMp4Source}];
 
         //videoData.json({name: ogvideoTitle, source: ogvideoMp4Source});
@@ -146,3 +153,16 @@ app.get('/api/datatest', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
+
+
+/*{
+    "@context":"https://schema.org",
+    "@type":"VideoObject",
+    "name":"Luis Campusano's walk-off two-run homer (6)",
+    "description":"Luis Campusano belts a walk-off two-run homer deep to left field to defeat the Yankees, 3-2 in extra innings",
+    "thumbnailUrl":"https://img.mlbstatic.com/mlb-images/image/upload/ar_16:9,g_auto,q_auto:good,w_1536,c_fill,f_jpg/mlb/mcnyapc1qkoizcqqa2qk",
+    "uploadDate":"2026-09-04",
+    "duration":"P0Y0M0DT0H0M43S",
+    "contentUrl":"https://mlb-cuts-diamond.mlb.com/FORGE/2026/2026-09/04/8aa5965e-ed1814dd-ba313552-csvm-diamondgcp-asset.m3u8",
+    "embedUrl":"https://streamable.com/m/paul-blackburn-in-play-run-s-to-luis-campusano"
+}*/
