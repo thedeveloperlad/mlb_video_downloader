@@ -13,6 +13,8 @@ function DownloadPage() {
     return <p>Not data.</p>;
   }
 
+  console.log("data recieve: ", dataRecieve);
+
   const handleDownload = async (fileUrl, name) => {
     setIsDownloading(true); // Start loading state
     console.log("File URL: " + fileUrl);

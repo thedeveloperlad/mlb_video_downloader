@@ -54,39 +54,78 @@ function App()
 
     console.log("input value: " + inputValue);
 
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    let result = inputValue.includes("milb");
+
+    if(result){
+
+        const requestMilbOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+                  name: inputValue, // Use your own property name / key
+            })
+        };
+
+        try
+        {
+
+            const response = await fetch('http://localhost:5050/api/checkMiLBUrlVideo', requestMilbOptions);
+
+            // Check for HTTP errors (e.g., 404, 500)
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Something went wrong');
+            }
+
+            const data = await response.json(); // Parse the JSON response body
+            setJsonRes(data); // Update the component state with the response data
+            // setError(null); // Clear any previous errors
+            console.log('Received JSON response:', data);
+            console.log('name', data.name )
+            console.log('description', data.description )
+            console.log('source', data.source )
+            setDataName(data.name);
+            setDataSource(data.source);
+
+            navigate('/downloadpage', { state: data }); //Send web data to downloadpage
+
+        } catch (error) {
+            console.error('Error sending data:', error);
+          }
+    } else {
+        
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
                 name: inputValue, // Use your own property name / key
-          })
-    };
+            })
+        };
 
-    try
-    {
+        try {
 
-      const response = await fetch('http://localhost:5050/api/checkURLvideo',requestOptions);
+            const response = await fetch('http://localhost:5050/api/checkURLvideo',requestOptions);
 
-      // Check for HTTP errors (e.g., 404, 500)
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Something went wrong');
+            // Check for HTTP errors (e.g., 404, 500)
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Something went wrong');
+            }
+
+            const data = await response.json(); // Parse the JSON response body
+            setJsonRes(data); // Update the component state with the response data
+            // setError(null); // Clear any previous errors
+            console.log('Received JSON response:', data);
+            console.log('name', data.name )
+            console.log('source', data.source )
+            setDataName(data.name);
+            setDataSource(data.source);
+
+            navigate('/downloadpage', { state: data }); //Send web data to downloadpage
+
+     } catch (error) {
+          console.error('Error sending data:', error);
       }
-
-      const data = await response.json(); // Parse the JSON response body
-      setJsonRes(data); // Update the component state with the response data
-      // setError(null); // Clear any previous errors
-      console.log('Received JSON response:', data);
-      console.log('name', data.name )
-      console.log('source', data.source )
-      setDataName(data.name);
-      setDataSource(data.source);
-
-      navigate('/downloadpage', { state: data }); //Send web data to downloadpage
-
-    } catch (error)
-    {
-      console.error('Error sending data:', error);
     }
   }
 

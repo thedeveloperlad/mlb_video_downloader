@@ -115,6 +115,85 @@ async function getMetadataParameters(url)
     return videoInformation;
 }
 
+/*
+
+if (typeof window.initData === 'string') {
+    const parsedData = JSON.parse(window.initData);
+    console.log(parsedData);
+}
+*/
+async function getMiLBMetadataParameters(url)
+{
+    var videoMiLBInformation = new Object();
+    var videoInformation = new Object();
+    console.log("getMiLBMetadataParameters().url= " + url);
+    const $ = cheerio.load(url);
+    // const htmlContent = cheerio.load(url);
+    // const axios = require('axios');
+    // const res = await axios.get(url);
+    // const htmlContent = res.data;
+
+    try {
+        const response = await axios.get(url);
+        const html = response.data;
+        const $ = cheerio.load(html);
+
+        // Now you can use Cheerio to extract data
+        // For example, to get the title of the page:
+        const pageTitle = $('title').text();
+        console.log('Page Title:', pageTitle);
+        const pageDescription = $('meta[property="og:description"]').attr('content');
+        console.log('OG video pageDescription:', pageDescription);
+
+        $('script').each((i, el) => {
+            const text = $(el).html();
+            
+            if (text && text.includes("window.webMediaPerformanceConfig = {};    window.INIT_DATA =")) {
+                console.log('Extracted text:', text);
+                // Regex pattern to capture the text inside the curly braces {}
+                const regex = /window\.INIT_DATA\s*=\s*({.*?});/;
+                const match = text.match(regex);
+      
+                if (match && match[1]) {
+                    const data = JSON.parse(match[1]);
+                    console.log('Extracted title:', data.title);
+                    console.log('Extracted description:', data.description);
+                    console.log('Extracted type:', data.type);
+                    console.log('Extracted url:', data.url);
+                }
+            }
+        });
+
+        videoMiLBInformation.name = pageTitle;
+        videoMiLBInformation.description = pageDescription;
+
+        videoInformation.mlbJsonRaw = videoMiLBInformation;
+
+    } catch (error) {
+        console.error('Error scraping URL:', error);
+    }    
+
+    console.log("getMetadataParameters.videoInformation= " + videoInformation);
+    // var jsonString = JSON.stringify(videoInformation);
+    return videoInformation;
+}
+
+app.post('/api/checkMiLBUrlVideo', async (request, response) => {
+    const receivedData = request.body; // Access the data sent from the client
+    console.log('HTML request-Received data:', receivedData.name);
+
+    const originalData = await getMiLBMetadataParameters(receivedData.name)
+
+    console.log("originalData=====originalData====originalData")
+    // console.log(originalData);
+    //let validJsonString = originalData.replace(/'/g, '"').replace(/\\\\/g, '\\');
+    //const obj = JSON.parse(validJsonString.trim());
+    //console.log("obj.playbacks= " + obj.playbacks);
+    // console.log(obj.result);
+
+    response.json(originalData);
+})
+
 /* <meta property="og:video" content="https://mlb-cuts-diamond.mlb.com/FORGE/2025/2025-10/25/bd928d98-f63b1acd-368c3d6a-csvm-diamondgcp-asset_1280x720_59_4000K.mp4">*/
 app.post('/api/checkURLvideo', async (request, response) => {
 
