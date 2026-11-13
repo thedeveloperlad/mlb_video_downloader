@@ -64,8 +64,8 @@ function DownloadPage() {
         <div style={{ padding: '15px', background: '#f6f6f9' }}>
           <button class="btn btn-lg btn-primary" onClick={() => handleDownload(dataRecieve.source, dataRecieve.name)}  disabled={isDownloading}>
                {isDownloading ? 'Downloading video...' : 'Download MP4 Video File'}
-               </button>
-              </div>
+          </button>
+        </div>
       </div>
     </div>
 

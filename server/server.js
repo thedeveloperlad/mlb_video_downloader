@@ -126,6 +126,7 @@ async function getMiLBMetadataParameters(url)
 {
     var videoMiLBInformation = new Object();
     var videoInformation = new Object();
+    var videoTextInformation = "";
     console.log("getMiLBMetadataParameters().url= " + url);
     const $ = cheerio.load(url);
     // const htmlContent = cheerio.load(url);
@@ -147,26 +148,37 @@ async function getMiLBMetadataParameters(url)
 
         $('script').each((i, el) => {
             const text = $(el).html();
-            
-            if (text && text.includes("window.webMediaPerformanceConfig = {};    window.INIT_DATA =")) {
-                console.log('Extracted text:', text);
+            // console.log('text:', text);
+            if (text && text.includes("window.webMediaPerformanceConfig")) {
+                // console.log('Extracted text:', text);
                 // Regex pattern to capture the text inside the curly braces {}
                 const regex = /window\.INIT_DATA\s*=\s*({.*?});/;
                 const match = text.match(regex);
-      
-                if (match && match[1]) {
-                    const data = JSON.parse(match[1]);
+                videoTextInformation = text;
+                
+                /*if (match && match[i]) {
+                    const data = JSON.parse(match[i]);
                     console.log('Extracted title:', data.title);
                     console.log('Extracted description:', data.description);
                     console.log('Extracted type:', data.type);
                     console.log('Extracted url:', data.url);
-                }
+                }*/
             }
         });
+        
 
-        videoMiLBInformation.name = pageTitle;
-        videoMiLBInformation.description = pageDescription;
+        videoTextInformation = videoTextInformation.replace(/window\.webMediaPerformanceConfig\s*=\s*\{\};(\\n|\s)*window\.INIT_DATA\s*=\s*/, "").trim().replace(/;$/, "");
+        
+        
+        
+        const parsedData = JSON.parse(videoTextInformation);
+        const firstPass = JSON.parse(parsedData);
 
+        videoMiLBInformation.name = firstPass.clip.data.title;
+        videoMiLBInformation.description = firstPass.clip.data.description;
+        videoInformation.source  = firstPass.clip.data.url;
+        videoInformation.cleanJson = firstPass;
+        videoMiLBInformation.textToConsoleLog = videoTextInformation;
         videoInformation.mlbJsonRaw = videoMiLBInformation;
 
     } catch (error) {
